@@ -63,8 +63,7 @@ class EventView(APIView):
             'time': request.data.get('time'),
             'price': request.data.get('price'),
             'no_of_tickets': request.data.get('no_of_tickets'),
-            'created_at': request.data.get('created_at'),
-            'updated_at': request.data.get('updated_at'),
+            'image': request.data.get('image')
         }
         serializer = EventsSerializer(data=data)
         if serializer.is_valid():
@@ -103,6 +102,7 @@ class EventDetailView(APIView):
             'date': request.data.get('date'),
             'time': request.data.get('time'),
             'price': request.data.get('price'),
+            'image': request.data.get('image'),
             'no_of_tickets': request.data.get('no_of_tickets'),
             'created_at': request.data.get('created_at'),
             'updated_at': request.data.get('updated_at'),
@@ -142,6 +142,7 @@ class MovieView(APIView):
             'price': request.data.get('price'),
             'duration': request.data.get('duration'),
             'date': request.data.get('date'),
+            'poster': request.data.get('poster'),
             'no_of_tickets': request.data.get('no_of_tickets'),
         }
         serializer = MoviesSerializer(data=data)
@@ -184,6 +185,7 @@ class MovieDetailView(APIView):
             'price': request.data.get('price'),
             'duration': request.data.get('duration'),
             'date': request.data.get('date'),
+            'poster': request.data.get('poster'),
             'no_of_tickets': request.data.get('no_of_tickets'),
         }
         serializer = MoviesSerializer(instance=movie_instance, data=data, partial=True)
@@ -218,6 +220,7 @@ class HotelsView(APIView):
             'address': request.data.get('address'),
             'price': request.data.get('price'),
             'rating': request.data.get('rating'),
+            'image': request.data.get('image')
         }
         serializer = HotelSerializer(data=data)
         if serializer.is_valid():
@@ -258,6 +261,7 @@ class HotelDetailView(APIView):
             'address': request.data.get('address'),
             'price': request.data.get('price'),
             'rating': request.data.get('rating'),
+            'image': request.data.get('image'),
         }
         serializer = HotelSerializer(instance=hotel_instance, data=data, partial=True)
         if serializer.is_valid():

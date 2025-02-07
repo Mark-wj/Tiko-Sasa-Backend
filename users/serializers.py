@@ -48,7 +48,13 @@ def get_tokens_for_user(user):
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = [            'title',
+            'venue',
+            'date',
+            'time',
+            'price',
+            'image',
+            'no_of_tickets']
 
 class HotelSerializer(serializers.ModelSerializer):
     class Meta:
