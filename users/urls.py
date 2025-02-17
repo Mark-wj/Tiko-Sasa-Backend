@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import RegisterView, LoginView, EventView, EventDetailView, MovieView, MovieDetailView, HotelsView, HotelDetailView
+from .views import create_checkout_session
+
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -9,5 +11,7 @@ urlpatterns = [
     path('movies/', MovieView.as_view(), name="movies"),
     path('movies/<int:movie_id>/', MovieDetailView.as_view(), name='Movie Detail View'),
     path('hotels/', HotelsView.as_view(), name='hotels'),
-    path('hotels/<int:hotel_id>/', HotelDetailView.as_view(), name='Hotel Detail')
+    path('hotels/<int:hotel_id>/', HotelDetailView.as_view(), name='Hotel Detail'),
+    path("stripe/create-checkout-session/", create_checkout_session, name="checkout")
 ]
+

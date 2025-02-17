@@ -1,3 +1,8 @@
+import stripe
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -5,6 +10,34 @@ from django.contrib.auth import login
 from .serializers import RegisterSerializer, LoginSerializer, get_tokens_for_user, HotelSerializer, MoviesSerializer, EventsSerializer
 from .models import Event, Hotels, Movies
 # Create your views here.
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+@csrf_exempt
+def create_checkout_session(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        try:
+            session = stripe.checkout.Session.create(
+                payment_method_types=["card"],
+                line_items=[
+                    {
+                        "price_data": {
+                            "currency": "usd",
+                            "product_data": {"name": data["product"]},
+                            "unit_amount": int(data["amount"]) * 100,  # Convert to cents
+                        },
+                        "quantity": 1,
+                    }
+                ],
+                mode="payment",
+                success_url="http://localhost:3000/success",
+                cancel_url="http://localhost:3000/cancel",
+            )
+            return JsonResponse({"id": session.id})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 class RegisterView(APIView):
     permission_classes = []
