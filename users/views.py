@@ -2,13 +2,14 @@ import stripe
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from django.contrib.auth import login
-from .serializers import RegisterSerializer, LoginSerializer, get_tokens_for_user, HotelSerializer, MoviesSerializer, EventsSerializer
-from .models import Event, Hotels, Movies
+from .serializers import RegisterSerializer, LoginSerializer, get_tokens_for_user, HotelSerializer, MoviesSerializer, EventsSerializer, HotelGallerySerializer, CastSerializer
+from .models import Event, Hotels, Movies, HotelGallery, MovieCast
 # Create your views here.
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -315,3 +316,89 @@ class HotelDetailView(APIView):
             {"res": "Hotel Deleted Successfully"},
             status=status.HTTP_200_OK
         )   
+
+class HotelGalleryListCreateView(APIView):
+    """
+    List all gallery images or create a new gallery image for a hotel.
+    """
+
+    def get(self, request, format=None):
+        galleries = HotelGallery.objects.all()
+        serializer = HotelGallerySerializer(galleries, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = HotelGallerySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class HotelGalleryDetailView(APIView):
+    """
+    Retrieve, update, or delete a gallery image instance.
+    """
+
+    def get_object(self, pk):
+        return get_object_or_404(HotelGallery, pk=pk)
+
+    def get(self, request, pk, format=None):
+        gallery = self.get_object(pk)
+        serializer = HotelGallerySerializer(gallery)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        gallery = self.get_object(pk)
+        serializer = HotelGallerySerializer(gallery, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        gallery = self.get_object(pk)
+        gallery.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class MovieCastListCreateView(APIView):
+    """
+    API view to retrieve list of cast members or create a new cast member.
+    """
+
+    def get(self, request, format=None):
+        cast_members = MovieCast.objects.all()
+        serializer = CastSerializer(cast_members, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = CastSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MovieCastDetailView(APIView):
+    """
+    API view to retrieve, update, or delete a specific cast member.
+    """
+
+    def get_object(self, pk):
+        return get_object_or_404(MovieCast, pk=pk)
+
+    def get(self, request, pk, format=None):
+        cast_member = self.get_object(pk)
+        serializer = CastSerializer(cast_member)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        cast_member = self.get_object(pk)
+        serializer = CastSerializer(cast_member, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        cast_member = self.get_object(pk)
+        cast_member.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -34,6 +34,14 @@ class Hotels(models.Model):
  
     def __str__(self):
         return self.nameield()
+
+class HotelGallery(models.Model):
+    hotel = models.ForeignKey(Hotels, related_name='gallery', on_delete=models.CASCADE)
+    image_url = models.URLField(max_length=500)  # Store image URL here
+    caption = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"Gallery Image for {self.hotel.name}"
     
 class Movies(models.Model):
     title = models.CharField(max_length=200)
@@ -49,3 +57,9 @@ class Movies(models.Model):
 
     def __str__(self):
         return self.title
+
+class MovieCast(models.Model):
+    movie = models.ForeignKey(Movies, related_name='cast', on_delete=models.CASCADE)
+    actor = models.CharField(max_length=100)
+    role = models.CharField(max_length=100)
+    image_url = models.URLField(max_length=500)

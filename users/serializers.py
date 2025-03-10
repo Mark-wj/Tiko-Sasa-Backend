@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Event, Hotels, Movies
+from .models import Event, Hotels, Movies, HotelGallery, MovieCast
 
 User = get_user_model()
 
@@ -56,12 +56,23 @@ class EventsSerializer(serializers.ModelSerializer):
             'image',
             'no_of_tickets']
 
+class HotelGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HotelGallery
+        fields = '__all__'
 class HotelSerializer(serializers.ModelSerializer):
+    gallery = HotelGallerySerializer(many=True, read_only=True)
     class Meta:
         model = Hotels
         fields = '__all__'
 
+class CastSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieCast
+        fields = '__all__'
+
 class MoviesSerializer(serializers.ModelSerializer):
+    cast = CastSerializer(many=True, read_only=True)
     class Meta:
         model = Movies
         fields = '__all__'
