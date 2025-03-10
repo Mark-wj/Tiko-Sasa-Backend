@@ -19,3 +19,4 @@ urlpatterns = [
     path('hotel-galleries/<int:pk>/', HotelGalleryDetailView.as_view(), name='hotel-gallery-detail'),
 ]
 
+# ma
