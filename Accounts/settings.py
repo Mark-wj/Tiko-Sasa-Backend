@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'Accounts.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://username:password@hostname:port/tikosasa')
+    'default': dj_database_url.config(default='postgres://mark:spizzoH23.@railway:8000/tikosasa')
 }
 
 
