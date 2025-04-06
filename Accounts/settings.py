@@ -62,7 +62,7 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'Accounts.urls'
 
@@ -88,10 +88,10 @@ WSGI_APPLICATION = 'Accounts.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Replace the config line with this for testing
 DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_PUBLIC_URL'))
+    'default': dj_database_url.parse('postgresql://postgres:QcwKdTEOMignnCQCNHWqozLmtoUWLBYr@maglev.proxy.rlwy.net:16391/railway')
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
