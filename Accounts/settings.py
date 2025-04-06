@@ -90,9 +90,11 @@ WSGI_APPLICATION = 'Accounts.wsgi.application'
 
 # Replace the config line with this for testing
 DATABASES = {
-    'default': dj_database_url.parse('postgresql://postgres:QcwKdTEOMignnCQCNHWqozLmtoUWLBYr@maglev.proxy.rlwy.net:16391/railway')
+    'default': dj_database_url.config(
+        env='DATABASE_PUBLIC_URL',  # Read from DATABASE_PUBLIC_URL
+        default='sqlite:///db.sqlite3'
+    )
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
